@@ -1,0 +1,232 @@
+## 配置
+  webpack需要传入一个配置对象，来定义你的打包行为。
+### 入口
+不配置默认从 *./src/index.js* 开始
+
+webpack.config.js
+```
+module.exports = {
+  entry: './src/doc-2-example/index.js'
+};
+```
+### 输出
+不配置默认为 *./dist/main.js*
+>The output directory as **absolute path** (required).
+>配置path时，需要使用绝对路径
+
+webpack.config.js
+```
+const path = require('path');
+
+module.exports = {
+  entry: './src/doc-2-example/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist/doc-2-example'),
+    filename: 'webpack.bundle.js'
+  }
+};
+```
+### loader
+>loader 让 webpack 能够去处理那些非 JavaScript 文件（webpack 自身只理解 JavaScript）。loader 可以将所有类型的文件转换为 webpack 能够处理的有效模块。
+
+loader 配置以对象形式声明在 module.rules 里
+
+   1. test 以文件名通过正则匹配为true时，选择对应的loader来转换该文件。
+   2. use 进行转换时，使用的loader。
+#### css-loader
+将css样式表编译成CommonJS 模块，样式表以字符串存储，不会渲染
+
+安装
+```
+npm install --save-dev css-loader
+```
+
+webpack.config.js
+```
+const path = require('path');
+
+module.exports = {
+  entry: './src/doc-2-example/css-style-loader.index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist/doc-2-example'),
+    filename: 'webpack.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'css-loader' ]
+      }
+    ]
+  }
+};
+```
+#### style-loader
+css-loader处理后的js模块，通过生成style标签将样式表写入文档。
+
+安装
+```
+npm install --save-dev style-loader
+```
+
+webpack.config.js
+```
+const path = require('path');
+
+module.exports = {
+  entry: './src/doc-2-example/css-style-loader.index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist/doc-2-example'),
+    filename: 'webpack.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      }
+    ]
+  }
+};
+```
+
+#### less-loader
+将less语法转译成css，交由css-loader进行后续处理。
+
+安装
+```
+npm install --save-dev less-loader
+```
+
+webpack.config.js
+```
+const path = require('path');
+
+module.exports = {
+  entry: './src/doc-2-example/less-css-style-loader.index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist/doc-2-example'),
+    filename: 'webpack.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      },
+      {
+        test: /\.less$/,
+        use: [ 'style-loader', 'css-loader', 'less-loader' ]
+      }
+    ]
+  }
+};
+```
+
+#### sass-loader
+将less语法转译成css，交由css-loader进行后续处理。
+
+安装
+```
+npm install sass-loader node-sass --save-dev
+```
+
+webpack.config.js
+```
+const path = require('path');
+
+module.exports = {
+  entry: './src/doc-2-example/sass-css-style-loader.index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist/doc-2-example'),
+    filename: 'webpack.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      },
+      {
+        test: /\.sass$|\.scss$/,
+        use: [ 'style-loader', 'css-loader', 'sass-loader' ]
+      }
+    ]
+  }
+};
+```
+#### html-loader
+将html文件导出为一个字符串。
+
+安装
+```
+npm i -D html-loader
+```
+
+webpack.config.js
+```
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/doc-2-example/html-loader.index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist/doc-2-example'),
+    filename: 'webpack.bundle.js'
+  },
+  module: {
+    rules: [
+        {
+          test: /\.css$/,
+          use: [ 'style-loader', 'css-loader' ]
+        },
+        {
+            test: /\.(html)$/,
+            use: [ 'html-loader' ]
+        }
+    ]
+  }
+};
+```
+### plugins
+>loader 被用于转换某些类型的模块，而插件则可以用于执行范围更广的任务。插件的范围包括，从打包优化和压缩，一直到重新定义环境中的变量。
+
+#### HtmlWebpackPlugin
+创建HTML文件，并自动插入打包后的静态资源，如脚本，样式表文件等。
+
+安装
+```
+npm install --save-dev html-webpack-plugin
+```
+
+webpack.config.js
+```
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/doc-2-example/sass-css-style-loader.index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist/doc-2-example'),
+    filename: 'webpack.bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      },
+      {
+        test: /\.sass$|\.scss$/,
+        use: [ 'style-loader', 'css-loader', 'sass-loader' ]
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+        title: 'Created by HtmlWebpackPlugin', 
+        template: './src/doc-2-example//index.html'
+    })
+  ]
+};
+```

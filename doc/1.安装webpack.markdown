@@ -1,5 +1,47 @@
 ## 安装webpack
-
+1. 全局安装
+```
+npm install webpack -g
+```
+2. 作为项目依赖安装
 ```
 npm install webpack --save-dev
 ```
+默认以最新版本安装 ``` --save-dev ``` 保存为开发依赖。
+## 遇到问题？
+1. 'webpack' 不是内部或外部命令，也不是可运行的程序
+或批处理文件。
+   * 选择全局安装webpack.
+   * 从项目根目录进入node_modules\webpack\bin 使用node 执行webpack.js 为了便于使用可配置到package.json。没有这个文件？执行 ```npm init``` 
+
+      package.json
+      ```
+        ｛
+            "scripts": {
+                "build": "node ./node_modules/webpack/bin/webpack.js"
+            }
+        ｝
+      ```
+   * 通过脚本查找webpack
+
+      >摘自：https://blog.csdn.net/weixin_44135121/java/article/details/90513634
+
+      webpack.cmd
+      ```
+        @IF EXIST "%~dp0\node.exe" (
+        "%~dp0\node.exe"  "%~dp0\node_modules\webpack\bin\webpack.js" %*
+        ) ELSE (
+        @SETLOCAL
+        @SET PATHEXT=%PATHEXT:;.JS;=;%
+        node  "%~dp0\node_modules\webpack\bin\webpack.js" %*
+        )
+      ```
+2. One CLI for webpack must be installed.
+     * 需要安装webpack-cli
+        ```
+        npm install webpack-cli -D
+        ```
+      * 控制台输入 ```yes``` 并回车
+      <center>
+      ![webpack-cli-required](./img/webpack-cli-required.png "webpack-cli-required")
+      </center>
